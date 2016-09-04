@@ -7,9 +7,13 @@
 //
 
 #import "ViewController.h"
+@import AssetsLibrary;
 
 
-@interface ViewController ()
+@interface ViewController () {
+    NSString *videoUrl;
+    NSString *imageUrl;
+}
 
 // Text field for the user to enter their Instagram image URL
 @property (nonatomic, strong) IBOutlet UITextField *urlEntry;
@@ -38,7 +42,7 @@
     // Process the URL asynchronously
     dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
         
-        [self processUrl:_urlEntry.text withCompletionBlock:^(NSData *picData, NSError *error) {
+        [self processUrl:_urlEntry.text withCompletionBlock:^(NSData *picvidData, NSError *error) {
             
             // After the image has been processed, run relevant UI updates
             // on the main thread
@@ -68,26 +72,60 @@
                     //
                     // *** Download Successful ***
                     //
-                    
-                    // Show the image with animation
-                    _imageView.image = [UIImage imageWithData:picData];
-                    [UIView beginAnimations:nil context:nil];
-                    [UIView setAnimationDuration:2];
-                    [UIView setAnimationDelay:0];
-                    [UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
-                    [_imageView setAlpha:1.0];
-                    [UIView commitAnimations];
-                    
-                    // Save it to the user's photo album
-                    UIImageWriteToSavedPhotosAlbum([UIImage imageWithData:picData], nil, nil, nil);
+                    if (videoUrl) {
+                        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+                        NSString *documentsDirectory = [paths objectAtIndex:0];
+                        
+                        NSString *fileName = [videoUrl lastPathComponent];
+                        
+                        NSString *filePath = [NSString stringWithFormat:@"%@/%@", documentsDirectory, fileName];
+                        
+                        //saving is done on main thread
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            [picvidData writeToFile:filePath atomically:YES];
+                            // After that use this path to save it to PhotoLibrary
+                            ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
+                            [library writeVideoAtPathToSavedPhotosAlbum:[NSURL fileURLWithPath:filePath] completionBlock:^(NSURL *assetURL, NSError
+                                                                                                                       *error) {
+                                if (error) {
+                                    NSLog(@"%@", error.description);
+                                }else {
+                                    NSLog(@"Done :)");
+                                }
+                            }];
+                            NSLog(@"File Saved !");
+                        });
+
+
+
+
+                    } else if (imageUrl){
+                        // Show the image with animation
+                        _imageView.image = [UIImage imageWithData:picvidData];
+                        [UIView beginAnimations:nil context:nil];
+                        [UIView setAnimationDuration:2];
+                        [UIView setAnimationDelay:0];
+                        [UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
+                        [_imageView setAlpha:1.0];
+                        [UIView commitAnimations];
+                        
+                        // Save it to the user's photo album
+                        UIImageWriteToSavedPhotosAlbum([UIImage imageWithData:picvidData], nil, nil, nil);
+                    }
                     
                     // Reset the view
                     _urlEntry.text = @"";
                     _activityIndicator.hidden = YES;
                     
+                    NSString *strMessage = @"The image was downloaded to your camera roll.";
+                    if(videoUrl) {
+                        strMessage = @"The video was downloaded to your camera roll.";
+                    }
+                    
+                    
                     // Tell the user the downloaded succeeded
                     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Success"
-                                                                                   message:@"The image was downloaded to your camera roll."
+                                                                                   message:strMessage
                                                                             preferredStyle:UIAlertControllerStyleAlert];
                     
                     UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:@"Dismiss"
@@ -132,23 +170,48 @@
         
         NSString *html = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
         NSScanner *scanner = [NSScanner scannerWithString:html];
-        NSString *token = nil;
+        NSString *tokenImage = nil;
+        NSString *tokenVideo = nil;
+        imageUrl = nil;
+        videoUrl = nil;
         
         // Find this image tag present in all of Instagram's
         // image page sources
-        NSString *ignoreString = @"<meta property=\"og:image\" content=\"";
-        [scanner scanUpToString:ignoreString intoString:nil];
+        NSString *ignoreStringImage = @"<meta property=\"og:image\" content=\"";
+        [scanner scanUpToString:ignoreStringImage intoString:nil];
         
         // Scan everything until the end of the tag
-        [scanner scanUpToString:@"\" />" intoString:&token];
+        [scanner scanUpToString:@"\" />" intoString:&tokenImage];
         
         // Remove empty spaces, newlines, etc. if they exist
-        NSString *imageUrl = [token stringByReplacingOccurrencesOfString:ignoreString withString:@""];
+        imageUrl = [tokenImage stringByReplacingOccurrencesOfString:ignoreStringImage withString:@""];
         imageUrl = [imageUrl stringByReplacingOccurrencesOfString:@" " withString:@""];
         imageUrl = [imageUrl stringByReplacingOccurrencesOfString:@"\n" withString:@""];
         
         // Print the URL for testing purposes
         NSLog(@"imageUrl: %@",imageUrl);
+        
+        
+        // Find video tag present in all of Instagram's
+        // video page sources
+        NSString *ignoreStringVideo = @"<meta property=\"og:video\" content=\"";
+        [scanner scanUpToString:ignoreStringVideo intoString:nil];
+        
+        // Scan everything until the end of the tag
+        [scanner scanUpToString:@"\" />" intoString:&tokenVideo];
+        
+        // Remove empty spaces, newlines, etc. if they exist
+        videoUrl = [tokenVideo stringByReplacingOccurrencesOfString:ignoreStringVideo withString:@""];
+        videoUrl = [videoUrl stringByReplacingOccurrencesOfString:@" " withString:@""];
+        videoUrl = [videoUrl stringByReplacingOccurrencesOfString:@"\n" withString:@""];
+        
+        // Print the URL for testing purposes
+        NSLog(@"videoUrl: %@",videoUrl);
+        
+        if (videoUrl) {
+            NSData *videoData = [NSData dataWithContentsOfURL:[NSURL URLWithString:videoUrl]];
+            completionBlock(videoData,nil);
+        }
         
         // Callback with pointer to NSError if parsing the
         // page source failed
@@ -201,6 +264,8 @@
     // Set up the view
     [_urlEntry becomeFirstResponder]; // Bring up the keyboard as soon as the app opens
     _imageView.alpha = 0.0;           // Hide the image view until an image is downloaded
+    
+    videoUrl = nil;
 }
 
 - (void)didReceiveMemoryWarning {
