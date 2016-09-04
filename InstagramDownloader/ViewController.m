@@ -7,8 +7,8 @@
 //
 
 #import "ViewController.h"
-@import AssetsLibrary;
-
+//@import AssetsLibrary;
+@import Photos;
 
 @interface ViewController () {
     NSString *videoUrl;
@@ -84,20 +84,36 @@
                         dispatch_async(dispatch_get_main_queue(), ^{
                             [picvidData writeToFile:filePath atomically:YES];
                             // After that use this path to save it to PhotoLibrary
-                            ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
-                            [library writeVideoAtPathToSavedPhotosAlbum:[NSURL fileURLWithPath:filePath] completionBlock:^(NSURL *assetURL, NSError
-                                                                                                                       *error) {
-                                if (error) {
-                                    NSLog(@"%@", error.description);
-                                }else {
-                                    NSLog(@"Done :)");
+                            //=> This method deprecated
+//                            ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
+//                            [library writeVideoAtPathToSavedPhotosAlbum:[NSURL fileURLWithPath:filePath] completionBlock:^(NSURL *assetURL, NSError
+//                                                                                                                       *error) {
+//                                if (error) {
+//                                    NSLog(@"%@", error.description);
+//                                }else {
+//                                    NSLog(@"Done :)");
+//                                }
+//                            }];
+                            
+                            //New method
+                            __block PHObjectPlaceholder *placeholder;
+                            
+                            [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
+                                PHAssetChangeRequest* createAssetRequest = [PHAssetChangeRequest creationRequestForAssetFromVideoAtFileURL:[NSURL fileURLWithPath:filePath]];
+                                placeholder = [createAssetRequest placeholderForCreatedAsset];
+                                
+                            } completionHandler:^(BOOL success, NSError *error) {
+                                if (success)
+                                {
+                                    NSLog(@"didFinishRecordingToOutputFileAtURL - success for ios9");
+                                }
+                                else
+                                {
+                                    NSLog(@"%@", error);
                                 }
                             }];
                             NSLog(@"File Saved !");
                         });
-
-
-
 
                     } else if (imageUrl){
                         // Show the image with animation
