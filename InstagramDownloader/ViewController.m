@@ -13,6 +13,7 @@
 @interface ViewController () {
     NSString *videoUrl;
     NSString *imageUrl;
+    NSData *thumbImageData;
 }
 
 // Text field for the user to enter their Instagram image URL
@@ -129,6 +130,17 @@
                         UIImageWriteToSavedPhotosAlbum([UIImage imageWithData:picvidData], nil, nil, nil);
                     }
                     
+                    if (thumbImageData) {
+                        // Show the image with animation
+                        _imageView.image = [UIImage imageWithData:thumbImageData];
+                        [UIView beginAnimations:nil context:nil];
+                        [UIView setAnimationDuration:2];
+                        [UIView setAnimationDelay:0];
+                        [UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
+                        [_imageView setAlpha:1.0];
+                        [UIView commitAnimations];
+                    }
+                    
                     // Reset the view
                     _urlEntry.text = @"";
                     _activityIndicator.hidden = YES;
@@ -190,6 +202,7 @@
         NSString *tokenVideo = nil;
         imageUrl = nil;
         videoUrl = nil;
+        thumbImageData = nil;
         
         // Find this image tag present in all of Instagram's
         // image page sources
@@ -225,6 +238,7 @@
         NSLog(@"videoUrl: %@",videoUrl);
         
         if (videoUrl) {
+            thumbImageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:imageUrl]];
             NSData *videoData = [NSData dataWithContentsOfURL:[NSURL URLWithString:videoUrl]];
             completionBlock(videoData,nil);
         }
