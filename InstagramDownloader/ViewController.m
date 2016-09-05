@@ -10,10 +10,11 @@
 //@import AssetsLibrary;
 @import Photos;
 
-@interface ViewController () {
+@interface ViewController ()<UIGestureRecognizerDelegate> {
     NSString *videoUrl;
     NSString *imageUrl;
     NSData *thumbImageData;
+    BOOL isChina;
 }
 
 // Text field for the user to enter their Instagram image URL
@@ -25,6 +26,11 @@
 // Image View that will display the downloaded image
 @property (nonatomic, strong) IBOutlet UIImageView *imageView;
 
+@property (weak, nonatomic) IBOutlet UIButton *helpButton;
+
+@property (weak, nonatomic) IBOutlet UIButton *downloadButton;
+
+@property (weak, nonatomic) IBOutlet UIImageView *languageImageView;
 @end
 
 @implementation ViewController
@@ -291,16 +297,58 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(autoPasteUrl) name:@"enterforeground" object:nil];
+    
     // Set up the view
     [_urlEntry becomeFirstResponder]; // Bring up the keyboard as soon as the app opens
     _imageView.alpha = 0.0;           // Hide the image view until an image is downloaded
     
     videoUrl = nil;
+    isChina = NO;
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleChangeLanguage)];
+    tap.numberOfTapsRequired = 1;
+    tap.delegate = self;
+    [self.languageImageView addGestureRecognizer:tap];
+    
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)autoPasteUrl{
+    UIPasteboard *thePasteboard = [UIPasteboard generalPasteboard];
+    NSString *pasteboardString = thePasteboard.string;
+    NSLog(@"%@", pasteboardString);
+    _urlEntry.text = pasteboardString;
+}
+
+- (void)handleChangeLanguage {
+    if(!isChina) {
+        isChina = YES;
+        [_languageImageView setImage: [UIImage imageNamed:@"china"]];
+    } else {
+        isChina = NO;
+        [_languageImageView setImage: [UIImage imageNamed:@"english"]];
+    }
+    [self updateUIbyLanguage];
+}
+
+- (void)updateUIbyLanguage {
+    if(isChina) {
+        [self.helpButton setTitle:@"幫助" forState:UIControlStateNormal];
+        [self.downloadButton setTitle:@"下載" forState:UIControlStateNormal];
+        [self.urlEntry setPlaceholder:@"這裡貼共享網址"];
+    } else {
+        [self.helpButton setTitle:@"Help" forState:UIControlStateNormal];
+        [self.downloadButton setTitle:@"Download" forState:UIControlStateNormal];
+        [self.urlEntry setPlaceholder:@"paste share url here"];
+    }
 }
 
 @end
