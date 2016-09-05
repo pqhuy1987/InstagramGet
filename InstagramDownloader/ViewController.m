@@ -152,17 +152,28 @@
                     _activityIndicator.hidden = YES;
                     
                     NSString *strMessage = @"The image was downloaded to your camera roll.";
+                    if (isChina) {
+                        strMessage = @"上的图像下载到你的相机胶卷。";
+                    }
                     if(videoUrl) {
                         strMessage = @"The video was downloaded to your camera roll.";
+                        if (isChina) {
+                            strMessage = @"该视频被下载到您的相机胶卷。";
+                        }
                     }
                     
-                    
+                    NSString *alertTitle = @"Success";
+                    NSString *action = @"Dismiss";
+                    if (isChina) {
+                        alertTitle = @"成功";
+                        action = @"解雇";
+                    }
                     // Tell the user the downloaded succeeded
-                    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Success"
+                    UIAlertController *alert = [UIAlertController alertControllerWithTitle:alertTitle
                                                                                    message:strMessage
                                                                             preferredStyle:UIAlertControllerStyleAlert];
                     
-                    UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:@"Dismiss"
+                    UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:action
                                                                             style:UIAlertActionStyleDefault
                                                                           handler:^(UIAlertAction * action) {}];
                     [alert addAction:defaultAction];
@@ -283,11 +294,23 @@
 
 -(IBAction)helpTapped:(id)sender
 {
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"How to Download an Image"
-                                                                   message:@"1) View an image in the Instagram app\n2) Click the button (•••)\n3)Tap \"Copy Share URL\"\n4)Paste it here"
+    NSString *strTitle = @"How to Download an Image";
+    NSString *strMessage = @"1) View an image in the Instagram app\n2) Click the button (•••)\n3)Tap \"Copy Share URL\"\n4)Paste it here";
+    
+    if (isChina){
+        strTitle = @"如何下载图像";
+        strMessage = @"1) 查看图像中的Instagram的应用\n2) 点击按钮 (•••)\n3)龙头 \"副本共享网址\"\n4)这里贴吧";
+    }
+    
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:strTitle
+                                                                   message:strMessage
                                                             preferredStyle:UIAlertControllerStyleAlert];
     
-    UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:@"Dismiss"
+    NSString *actionTitle = @"Dismiss";
+    if (isChina) {
+        actionTitle = @"解雇";
+    }
+    UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:actionTitle
                                                             style:UIAlertActionStyleDefault
                                                           handler:^(UIAlertAction * action) {}];
     [alert addAction:defaultAction];
