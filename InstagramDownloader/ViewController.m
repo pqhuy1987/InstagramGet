@@ -62,12 +62,21 @@
                     // *** Download Failed ***
                     //
                     
+                    NSString *errorTitle = @"Error";
+                    NSString *errorMessage = @"There was an error downloading the image. Check the URL for errors.";
+                    NSString *dismiss = @"Dismiss";
+                    if (isChina) {
+                        errorTitle = @"错误";
+                        errorMessage = @"有一个错误下载图像。检查错误的URL。";
+                        dismiss = @"解雇";
+                    }
+                    
                     // Tell the user the download failed
-                    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error"
-                                                                                   message:@"There was an error downloading the image. Check the URL for errors."
+                    UIAlertController *alert = [UIAlertController alertControllerWithTitle:errorTitle
+                                                                                   message:errorMessage
                                                                             preferredStyle:UIAlertControllerStyleAlert];
                     
-                    UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:@"Dismiss"
+                    UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:dismiss
                                                                             style:UIAlertActionStyleDefault
                                                                           handler:^(UIAlertAction * action) {}];
                     [alert addAction:defaultAction];
