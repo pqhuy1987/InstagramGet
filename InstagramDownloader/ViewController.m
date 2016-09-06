@@ -336,10 +336,18 @@
     _imageView.alpha = 0.0;           // Hide the image view until an image is downloaded
     
     videoUrl = nil;
-    isChina = NO;
+    isChina = YES;
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleChangeLanguage)];
     tap.numberOfTapsRequired = 1;
     tap.delegate = self;
+    if(!isChina) {
+        //isChina = YES;
+        [_languageImageView setImage: [UIImage imageNamed:@"english"]];
+    } else {
+        //isChina = NO;
+        [_languageImageView setImage: [UIImage imageNamed:@"china"]];
+    }
+    [self updateUIbyLanguage];
     [self.languageImageView addGestureRecognizer:tap];
     
 }
