@@ -14,7 +14,7 @@
     NSString *videoUrl;
     NSString *imageUrl;
     NSData *thumbImageData;
-    BOOL isChina;
+    BOOL isArabic;
 }
 
 // Text field for the user to enter their Instagram image URL
@@ -42,7 +42,7 @@
     {
         return;
     }
-        
+    
     // If so, display the indicator and begin downloading
     _activityIndicator.hidden = NO;
     
@@ -62,13 +62,14 @@
                     // *** Download Failed ***
                     //
                     
+                    // Tell the user the download failed
                     NSString *errorTitle = @"Error";
                     NSString *errorMessage = @"There was an error downloading the image. Check the URL for errors.";
                     NSString *dismiss = @"Dismiss";
-                    if (isChina) {
-                        errorTitle = @"错误";
-                        errorMessage = @"有一个错误下载图像。检查错误的URL。";
-                        dismiss = @"解雇";
+                    if (isArabic) {
+                        errorTitle = @"خطأ";
+                        errorMessage = @"كان هناك خطأ في تحميل الصورة. تحقق من عنوان URL";
+                        dismiss = @"إغلاق";
                     }
                     
                     // Tell the user the download failed
@@ -101,15 +102,15 @@
                             [picvidData writeToFile:filePath atomically:YES];
                             // After that use this path to save it to PhotoLibrary
                             //=> This method deprecated
-//                            ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
-//                            [library writeVideoAtPathToSavedPhotosAlbum:[NSURL fileURLWithPath:filePath] completionBlock:^(NSURL *assetURL, NSError
-//                                                                                                                       *error) {
-//                                if (error) {
-//                                    NSLog(@"%@", error.description);
-//                                }else {
-//                                    NSLog(@"Done :)");
-//                                }
-//                            }];
+                            //                            ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
+                            //                            [library writeVideoAtPathToSavedPhotosAlbum:[NSURL fileURLWithPath:filePath] completionBlock:^(NSURL *assetURL, NSError
+                            //                                                                                                                       *error) {
+                            //                                if (error) {
+                            //                                    NSLog(@"%@", error.description);
+                            //                                }else {
+                            //                                    NSLog(@"Done :)");
+                            //                                }
+                            //                            }];
                             
                             //New method
                             __block PHObjectPlaceholder *placeholder;
@@ -130,7 +131,7 @@
                             }];
                             NSLog(@"File Saved !");
                         });
-
+                        
                     } else if (imageUrl){
                         // Show the image with animation
                         _imageView.image = [UIImage imageWithData:picvidData];
@@ -161,21 +162,21 @@
                     _activityIndicator.hidden = YES;
                     
                     NSString *strMessage = @"The image was downloaded to your camera roll.";
-                    if (isChina) {
-                        strMessage = @"上的图像下载到你的相机胶卷。";
+                    if (isArabic) {
+                        strMessage = @"تم تحميل الصورة الى البوم الكاميرا";
                     }
                     if(videoUrl) {
                         strMessage = @"The video was downloaded to your camera roll.";
-                        if (isChina) {
-                            strMessage = @"该视频被下载到您的相机胶卷。";
+                        if (isArabic) {
+                            strMessage = @"تم تحميل الفيديو إلى البوم الكاميرا";
                         }
                     }
                     
                     NSString *alertTitle = @"Success";
                     NSString *action = @"Dismiss";
-                    if (isChina) {
-                        alertTitle = @"成功";
-                        action = @"解雇";
+                    if (isArabic) {
+                        alertTitle = @"أكتمل";
+                        action = @"إغلاق";
                     }
                     // Tell the user the downloaded succeeded
                     UIAlertController *alert = [UIAlertController alertControllerWithTitle:alertTitle
@@ -214,7 +215,7 @@
         
         if (error || !data)
         {
-          // something went wrong
+            // something went wrong
             NSError *error = [NSError errorWithDomain:@"DownloadFailed"
                                                  code:-1
                                              userInfo:@{ NSLocalizedFailureReasonErrorKey : NSLocalizedString(@"Invalid url",nil)}];
@@ -297,7 +298,7 @@
                                              userInfo:@{ NSLocalizedFailureReasonErrorKey : NSLocalizedString(@"Null image data",nil)}];
             completionBlock(nil,error);
         }
-
+        
     }] resume];
 }
 
@@ -306,9 +307,9 @@
     NSString *strTitle = @"How to Download an Image";
     NSString *strMessage = @"1) View an image in the Instagram app\n2) Click the button (•••)\n3)Tap \"Copy Share URL\"\n4)Paste it here";
     
-    if (isChina){
-        strTitle = @"如何下载图像";
-        strMessage = @"1) 查看图像中的Instagram的应用\n2) 点击按钮 (•••)\n3)龙头 \"副本共享网址\"\n4)这里贴吧";
+    if (isArabic){
+        strTitle = @"كيفية تحميل الصور والفيديو";
+        strMessage = @"1) عرض الصورة أو الفيديو دخل تطبيق انستقرام\n2) الضغط على زر (•••)\n3)النقر \"على زر Copy Share URL\"\n4)الصقة هنا";
     }
     
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:strTitle
@@ -316,8 +317,8 @@
                                                             preferredStyle:UIAlertControllerStyleAlert];
     
     NSString *actionTitle = @"Dismiss";
-    if (isChina) {
-        actionTitle = @"解雇";
+    if (isArabic) {
+        actionTitle = @"إغلاق";
     }
     UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:actionTitle
                                                             style:UIAlertActionStyleDefault
@@ -336,20 +337,29 @@
     _imageView.alpha = 0.0;           // Hide the image view until an image is downloaded
     
     videoUrl = nil;
-    isChina = YES;
+    isArabic = YES;
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleChangeLanguage)];
     tap.numberOfTapsRequired = 1;
     tap.delegate = self;
-    if(!isChina) {
-        //isChina = YES;
+    if(!isArabic) {
+        //isArabic = YES;
         [_languageImageView setImage: [UIImage imageNamed:@"english"]];
     } else {
-        //isChina = NO;
-        [_languageImageView setImage: [UIImage imageNamed:@"china"]];
+        //isArabic = NO;
+        [_languageImageView setImage: [UIImage imageNamed:@"Arabic"]];
     }
     [self updateUIbyLanguage];
     [self.languageImageView addGestureRecognizer:tap];
     
+}
+
+- (UIImage*)imageWithImage:(UIImage*)image andWidth:(CGFloat)width andHeight:(CGFloat)height
+{
+    UIGraphicsBeginImageContext( CGSizeMake(width, height));
+    [image drawInRect:CGRectMake(0,0,width,height)];
+    UIImage* newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext() ;
+    return newImage;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -369,26 +379,36 @@
 }
 
 - (void)handleChangeLanguage {
-    if(!isChina) {
-        isChina = YES;
-        [_languageImageView setImage: [UIImage imageNamed:@"china"]];
+    if(!isArabic) {
+        isArabic = YES;
+        [_languageImageView setImage: [UIImage imageNamed:@"Arabic"]];
     } else {
-        isChina = NO;
+        isArabic = NO;
         [_languageImageView setImage: [UIImage imageNamed:@"english"]];
     }
     [self updateUIbyLanguage];
 }
 
 - (void)updateUIbyLanguage {
-    if(isChina) {
-        [self.helpButton setTitle:@"幫助" forState:UIControlStateNormal];
-        [self.downloadButton setTitle:@"下載" forState:UIControlStateNormal];
-        [self.urlEntry setPlaceholder:@"這裡貼共享網址"];
+    if(isArabic) {
+        [self.helpButton setTitle:@"مساعدة" forState:UIControlStateNormal];
+        [self.downloadButton setTitle:@"تـحــمـيـل" forState:UIControlStateNormal];
+        [self.urlEntry setPlaceholder:@"الصق الرابط هنا"];
     } else {
         [self.helpButton setTitle:@"Help" forState:UIControlStateNormal];
         [self.downloadButton setTitle:@"Download" forState:UIControlStateNormal];
-        [self.urlEntry setPlaceholder:@"paste share url here"];
+        [self.urlEntry setPlaceholder:@"paste url here"];
     }
+}
+- (IBAction)BackGroundTapp:(id)sender {
+    
+    [self.view endEditing:YES];
+}
+
+-(BOOL)textFieldShouldReturn : (UITextField *) textField {
+    
+    [textField resignFirstResponder];
+    return YES;
 }
 
 @end
