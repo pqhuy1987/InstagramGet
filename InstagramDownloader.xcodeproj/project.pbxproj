@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		122C6E991D8B219000A92299 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 122C6E981D8B219000A92299 /* GoogleService-Info.plist */; };
 		366BA34A1BD4A7D4008C9CA2 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 366BA3491BD4A7D4008C9CA2 /* main.m */; };
 		366BA34D1BD4A7D4008C9CA2 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 366BA34C1BD4A7D4008C9CA2 /* AppDelegate.m */; };
 		366BA3501BD4A7D4008C9CA2 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 366BA34F1BD4A7D4008C9CA2 /* ViewController.m */; };
@@ -35,6 +36,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		122C6E981D8B219000A92299 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		366BA3451BD4A7D4008C9CA2 /* InstagramDownloader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = InstagramDownloader.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		366BA3491BD4A7D4008C9CA2 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		366BA34B1BD4A7D4008C9CA2 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -101,6 +103,7 @@
 		366BA3471BD4A7D4008C9CA2 /* InstagramDownloader */ = {
 			isa = PBXGroup;
 			children = (
+				122C6E981D8B219000A92299 /* GoogleService-Info.plist */,
 				366BA34B1BD4A7D4008C9CA2 /* AppDelegate.h */,
 				366BA34C1BD4A7D4008C9CA2 /* AppDelegate.m */,
 				366BA34E1BD4A7D4008C9CA2 /* ViewController.h */,
@@ -245,6 +248,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				366BA3581BD4A7D4008C9CA2 /* LaunchScreen.storyboard in Resources */,
+				122C6E991D8B219000A92299 /* GoogleService-Info.plist in Resources */,
 				366BA3551BD4A7D4008C9CA2 /* Assets.xcassets in Resources */,
 				366BA3531BD4A7D4008C9CA2 /* Main.storyboard in Resources */,
 			);
