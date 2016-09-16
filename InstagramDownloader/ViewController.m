@@ -330,6 +330,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.bannerView.adUnitID = @"ca-app-pub-5722562744549789/4221694555";
+    self.bannerView.rootViewController = self;
+    [self.bannerView loadRequest:[GADRequest request]];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(autoPasteUrl) name:@"enterforeground" object:nil];
     [self autoPasteUrl];
     // Set up the view
