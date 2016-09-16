@@ -383,8 +383,10 @@
 - (void)autoPasteUrl{
     UIPasteboard *thePasteboard = [UIPasteboard generalPasteboard];
     NSString *pasteboardString = thePasteboard.string;
-    NSLog(@"%@", pasteboardString);
-    _urlEntry.text = pasteboardString;
+    if ([pasteboardString containsString:@"http"]) {
+        //NSLog(@"%@", pasteboardString);
+        _urlEntry.text = pasteboardString;
+    }
 }
 
 - (void)handleChangeLanguage {
