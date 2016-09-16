@@ -14,7 +14,7 @@
     NSString *videoUrl;
     NSString *imageUrl;
     NSData *thumbImageData;
-    BOOL isArabic;
+    BOOL isVietnamese;
 }
 
 // Text field for the user to enter their Instagram image URL
@@ -31,6 +31,9 @@
 @property (weak, nonatomic) IBOutlet UIButton *downloadButton;
 
 @property (weak, nonatomic) IBOutlet UIImageView *languageImageView;
+
+@property (weak, nonatomic) IBOutlet UILabel *TextView;
+
 @end
 
 @implementation ViewController
@@ -66,10 +69,10 @@
                     NSString *errorTitle = @"Error";
                     NSString *errorMessage = @"There was an error downloading the image. Check the URL for errors.";
                     NSString *dismiss = @"Dismiss";
-                    if (isArabic) {
-                        errorTitle = @"خطأ";
-                        errorMessage = @"كان هناك خطأ في تحميل الصورة. تحقق من عنوان URL";
-                        dismiss = @"إغلاق";
+                    if (isVietnamese) {
+                        errorTitle = @"Lỗi";
+                        errorMessage = @"Có lỗi trong quá trình tải ảnh hoặc video, vui lỏng kiểm tra lại Share URL";
+                        dismiss = @"Bỏ qua";
                     }
                     
                     // Tell the user the download failed
@@ -162,21 +165,21 @@
                     _activityIndicator.hidden = YES;
                     
                     NSString *strMessage = @"The image was downloaded to your camera roll.";
-                    if (isArabic) {
-                        strMessage = @"تم تحميل الصورة الى البوم الكاميرا";
+                    if (isVietnamese) {
+                        strMessage = @"Ảnh đã được tải về cuộc Camera của bạn";
                     }
                     if(videoUrl) {
                         strMessage = @"The video was downloaded to your camera roll.";
-                        if (isArabic) {
-                            strMessage = @"تم تحميل الفيديو إلى البوم الكاميرا";
+                        if (isVietnamese) {
+                            strMessage = @"Video đã được tải về cuộc Camera của bạn";
                         }
                     }
                     
                     NSString *alertTitle = @"Success";
                     NSString *action = @"Dismiss";
-                    if (isArabic) {
-                        alertTitle = @"أكتمل";
-                        action = @"إغلاق";
+                    if (isVietnamese) {
+                        alertTitle = @"Tải thành công";
+                        action = @"Bỏ qua";
                     }
                     // Tell the user the downloaded succeeded
                     UIAlertController *alert = [UIAlertController alertControllerWithTitle:alertTitle
@@ -304,12 +307,12 @@
 
 -(IBAction)helpTapped:(id)sender
 {
-    NSString *strTitle = @"How to Download an Image";
-    NSString *strMessage = @"1) View an image in the Instagram app\n2) Click the button (•••)\n3)Tap \"Copy Share URL\"\n4)Paste it here";
+    NSString *strTitle = @"How to Download an Image ?";
+    NSString *strMessage = @"1) View an image in the Instagram app\n\r 2) Click the button (•••)\n\r 3)Tap \"Copy Share URL\"\n\r 4)Paste it here";
     
-    if (isArabic){
-        strTitle = @"كيفية تحميل الصور والفيديو";
-        strMessage = @"1) عرض الصورة أو الفيديو دخل تطبيق انستقرام\n2) الضغط على زر (•••)\n3)النقر \"على زر Copy Share URL\"\n4)الصقة هنا";
+    if (isVietnamese){
+        strTitle = @"Tải ảnh và video như thế nào ?";
+        strMessage = @"1) Vào Instagram mở một bức ảnh hoặc video\n\r 2) Bấm vào nút (•••)\n\r 3)Bấm vào \"Copy Share URL\"\n\r 4)Dán vào ô URL của ứng dụng";
     }
     
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:strTitle
@@ -317,8 +320,8 @@
                                                             preferredStyle:UIAlertControllerStyleAlert];
     
     NSString *actionTitle = @"Dismiss";
-    if (isArabic) {
-        actionTitle = @"إغلاق";
+    if (isVietnamese) {
+        actionTitle = @"Bỏ qua";
     }
     UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:actionTitle
                                                             style:UIAlertActionStyleDefault
@@ -341,16 +344,18 @@
     _imageView.alpha = 0.0;           // Hide the image view until an image is downloaded
     
     videoUrl = nil;
-    isArabic = YES;
+    isVietnamese = YES;
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleChangeLanguage)];
     tap.numberOfTapsRequired = 1;
     tap.delegate = self;
-    if(!isArabic) {
+    if(!isVietnamese) {
         //isArabic = YES;
         [_languageImageView setImage: [UIImage imageNamed:@"english"]];
+        self.TextView.text = @"App get video/photo from Instagram";
     } else {
         //isArabic = NO;
-        [_languageImageView setImage: [UIImage imageNamed:@"Arabic"]];
+        [_languageImageView setImage: [UIImage imageNamed:@"Vietnam"]];
+        self.TextView.text = @"Ứng dụng lấy video/ảnh từ Instagram";
     }
     [self updateUIbyLanguage];
     [self.languageImageView addGestureRecognizer:tap];
@@ -383,25 +388,27 @@
 }
 
 - (void)handleChangeLanguage {
-    if(!isArabic) {
-        isArabic = YES;
-        [_languageImageView setImage: [UIImage imageNamed:@"Arabic"]];
+    if(!isVietnamese) {
+        isVietnamese = YES;
+        [_languageImageView setImage: [UIImage imageNamed:@"Vietnam"]];
     } else {
-        isArabic = NO;
+        isVietnamese = NO;
         [_languageImageView setImage: [UIImage imageNamed:@"english"]];
     }
     [self updateUIbyLanguage];
 }
 
 - (void)updateUIbyLanguage {
-    if(isArabic) {
-        [self.helpButton setTitle:@"مساعدة" forState:UIControlStateNormal];
-        [self.downloadButton setTitle:@"تـحــمـيـل" forState:UIControlStateNormal];
-        [self.urlEntry setPlaceholder:@"الصق الرابط هنا"];
+    if(isVietnamese) {
+        [self.helpButton setTitle:@"Trợ giúp" forState:UIControlStateNormal];
+        [self.downloadButton setTitle:@"Tải về" forState:UIControlStateNormal];
+        [self.urlEntry setPlaceholder:@"Dán share url vào đây"];
+        self.TextView.text = @"Ứng dụng lấy video/ảnh từ Instagram";
     } else {
         [self.helpButton setTitle:@"Help" forState:UIControlStateNormal];
         [self.downloadButton setTitle:@"Download" forState:UIControlStateNormal];
-        [self.urlEntry setPlaceholder:@"paste url here"];
+        [self.urlEntry setPlaceholder:@"paste share url here"];
+        self.TextView.text = @"App get video/photo from Instagram";
     }
 }
 - (IBAction)BackGroundTapp:(id)sender {
