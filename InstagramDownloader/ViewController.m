@@ -31,6 +31,9 @@
 @property (weak, nonatomic) IBOutlet UIButton *downloadButton;
 
 @property (weak, nonatomic) IBOutlet UIImageView *languageImageView;
+
+@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
+
 @end
 
 @implementation ViewController
@@ -344,9 +347,11 @@
     if(!isArabic) {
         //isArabic = YES;
         [_languageImageView setImage: [UIImage imageNamed:@"english"]];
+        self.titleLabel.text = @"This is english Title";
     } else {
         //isArabic = NO;
         [_languageImageView setImage: [UIImage imageNamed:@"Arabic"]];
+        self.titleLabel.text = @"تطبيف حفظ الصور والمقاطع من انستقرام";
     }
     [self updateUIbyLanguage];
     [self.languageImageView addGestureRecognizer:tap];
@@ -394,10 +399,12 @@
         [self.helpButton setTitle:@"مساعدة" forState:UIControlStateNormal];
         [self.downloadButton setTitle:@"تـحــمـيـل" forState:UIControlStateNormal];
         [self.urlEntry setPlaceholder:@"الصق الرابط هنا"];
+        self.titleLabel.text = @"تطبيف حفظ الصور والمقاطع من انستقرام";
     } else {
         [self.helpButton setTitle:@"Help" forState:UIControlStateNormal];
         [self.downloadButton setTitle:@"Download" forState:UIControlStateNormal];
         [self.urlEntry setPlaceholder:@"paste url here"];
+        self.titleLabel.text = @"This is english Title";
     }
 }
 - (IBAction)BackGroundTapp:(id)sender {

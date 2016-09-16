@@ -93,7 +93,7 @@
                             <constraint firstItem="oR3-4L-lhT" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="alt-3w-eaW"/>
                             <constraint firstItem="vJa-v3-L6J" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailingMargin" constant="4" id="biX-8U-vkt"/>
                             <constraint firstItem="KXo-Gj-qXF" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailingMargin" constant="4" id="boT-rC-bjF"/>
-                            <constraint firstItem="6rL-kC-V1b" firstAttribute="top" secondItem="Xkt-2n-ue8" secondAttribute="bottom" constant="-20" id="d5y-U1-hZ3"/>
+                            <constraint firstItem="6rL-kC-V1b" firstAttribute="top" secondItem="Xkt-2n-ue8" secondAttribute="bottom" constant="20" id="d5y-U1-hZ3"/>
                             <constraint firstItem="COD-RF-WDF" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="gFw-Gk-XWb"/>
                             <constraint firstItem="NN8-NI-eIo" firstAttribute="top" secondItem="vJa-v3-L6J" secondAttribute="bottom" constant="18" id="geY-dW-13Z"/>
                             <constraint firstItem="vJa-v3-L6J" firstAttribute="top" secondItem="KXo-Gj-qXF" secondAttribute="bottom" constant="10" id="h3h-nh-Agu"/>
@@ -102,7 +102,7 @@
                             <constraint firstItem="Xkt-2n-ue8" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="neu-WR-n0o"/>
                             <constraint firstItem="NN8-NI-eIo" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="4" id="o6I-cF-E0V"/>
                             <constraint firstItem="ySe-BK-ofj" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="v0b-Nx-xca"/>
-                            <constraint firstItem="Xkt-2n-ue8" firstAttribute="top" secondItem="vJa-v3-L6J" secondAttribute="bottom" constant="40" id="viO-Dk-YMj"/>
+                            <constraint firstItem="Xkt-2n-ue8" firstAttribute="top" secondItem="vJa-v3-L6J" secondAttribute="bottom" constant="20" id="viO-Dk-YMj"/>
                         </constraints>
                         <connections>
                             <outletCollection property="gestureRecognizers" destination="EXL-zb-rqA" appends="YES" id="eMt-Q7-AVB"/>
@@ -114,6 +114,7 @@
                         <outlet property="helpButton" destination="FlP-zh-wEw" id="fqi-z2-pau"/>
                         <outlet property="imageView" destination="KXo-Gj-qXF" id="6dG-mQ-8Eu"/>
                         <outlet property="languageImageView" destination="NN8-NI-eIo" id="NYE-7g-dci"/>
+                        <outlet property="titleLabel" destination="COD-RF-WDF" id="PbC-Bw-nGJ"/>
                         <outlet property="urlEntry" destination="vJa-v3-L6J" id="KY9-4R-eOy"/>
                     </connections>
                 </viewController>
