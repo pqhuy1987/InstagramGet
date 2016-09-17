@@ -340,11 +340,11 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(autoPasteUrl) name:@"enterforeground" object:nil];
     [self autoPasteUrl];
     // Set up the view
-    [_urlEntry becomeFirstResponder]; // Bring up the keyboard as soon as the app opens
+    //[_urlEntry becomeFirstResponder]; // Bring up the keyboard as soon as the app opens
     _imageView.alpha = 0.0;           // Hide the image view until an image is downloaded
     
     videoUrl = nil;
-    isVietnamese = YES;
+    isVietnamese = NO;
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleChangeLanguage)];
     tap.numberOfTapsRequired = 1;
     tap.delegate = self;
