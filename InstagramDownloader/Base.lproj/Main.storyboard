@@ -16,7 +16,7 @@
                         <viewControllerLayoutGuide type="bottom" id="6rL-kC-V1b"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="640×1136" translatesAutoresizingMaskIntoConstraints="NO" id="oR3-4L-lhT"/>
@@ -66,15 +66,7 @@
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="otp-iE-Fct" customClass="GADBannerView">
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="50" id="Tg8-JU-icA"/>
-                                    <constraint firstAttribute="width" constant="320" id="X0O-DS-QGH"/>
-                                </constraints>
-                            </view>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FlP-zh-wEw">
-                                <frame key="frameInset" minX="255" minY="465" width="120" height="35"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FlP-zh-wEw">
                                 <constraints>
                                     <constraint firstAttribute="height" constant="35" id="1yM-2j-lbT"/>
                                     <constraint firstAttribute="width" constant="120" id="lah-M9-JwB"/>
@@ -87,17 +79,24 @@
                                     <action selector="helpTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="K7X-wl-xeg"/>
                                 </connections>
                             </button>
+                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="otp-iE-Fct" customClass="GADBannerView">
+                                <frame key="frameInset" minX="0.0%" minY="100.00%" width="320" height="50"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="bc1-wG-9XG"/>
+                                    <constraint firstAttribute="width" constant="320" id="scJ-RW-mQj"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" red="0.95508579019999995" green="0.95508579019999995" blue="0.95508579019999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="6rL-kC-V1b" firstAttribute="top" secondItem="oR3-4L-lhT" secondAttribute="bottom" id="80r-Ie-CsL"/>
-                            <constraint firstItem="otp-iE-Fct" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="12" id="Hy1-gy-b3y"/>
                             <constraint firstItem="vJa-v3-L6J" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="4" id="Iys-jH-kAi"/>
                             <constraint firstItem="KXo-Gj-qXF" firstAttribute="top" secondItem="COD-RF-WDF" secondAttribute="bottom" constant="8" id="K66-ng-mEi"/>
                             <constraint firstItem="FlP-zh-wEw" firstAttribute="top" secondItem="vJa-v3-L6J" secondAttribute="bottom" constant="18" id="LLn-J3-mZb"/>
                             <constraint firstItem="oR3-4L-lhT" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="McX-U2-148"/>
+                            <constraint firstItem="6rL-kC-V1b" firstAttribute="top" secondItem="otp-iE-Fct" secondAttribute="bottom" id="OPl-0p-3H3"/>
                             <constraint firstItem="KXo-Gj-qXF" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="4" id="SfW-Vu-Op7"/>
-                            <constraint firstItem="6rL-kC-V1b" firstAttribute="top" secondItem="otp-iE-Fct" secondAttribute="bottom" id="Ulf-QA-7TE"/>
                             <constraint firstItem="FlP-zh-wEw" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailingMargin" constant="4" id="Vwy-a4-0GR"/>
                             <constraint firstItem="ySe-BK-ofj" firstAttribute="top" secondItem="COD-RF-WDF" secondAttribute="bottom" constant="95" id="W5W-sE-xy0"/>
                             <constraint firstItem="oR3-4L-lhT" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="alt-3w-eaW"/>
@@ -110,7 +109,6 @@
                             <constraint firstItem="COD-RF-WDF" firstAttribute="top" secondItem="2ao-Nu-M4N" secondAttribute="bottom" constant="20" id="hiQ-iM-3Iy"/>
                             <constraint firstAttribute="trailing" secondItem="oR3-4L-lhT" secondAttribute="trailing" id="kaO-F3-sdh"/>
                             <constraint firstItem="Xkt-2n-ue8" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="neu-WR-n0o"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="otp-iE-Fct" secondAttribute="trailing" constant="11" id="o3B-Cp-LzV"/>
                             <constraint firstItem="NN8-NI-eIo" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="4" id="o6I-cF-E0V"/>
                             <constraint firstItem="ySe-BK-ofj" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="v0b-Nx-xca"/>
                             <constraint firstItem="Xkt-2n-ue8" firstAttribute="top" secondItem="vJa-v3-L6J" secondAttribute="bottom" constant="20" id="viO-Dk-YMj"/>
