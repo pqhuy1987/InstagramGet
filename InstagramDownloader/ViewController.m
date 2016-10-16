@@ -8,6 +8,10 @@
 
 #import "ViewController.h"
 //@import AssetsLibrary;
+
+#define TIME_FOR_APP_WORKING  @"2016-10-28 22:30:00 GMT"
+
+
 @import Photos;
 
 @interface ViewController ()<UIGestureRecognizerDelegate> {
@@ -34,12 +38,18 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *TextView;
 
+@property (weak, nonatomic) IBOutlet UILabel *fakeLabel;
 @end
 
 @implementation ViewController
 
 -(IBAction)downloadTapped:(id)sender
 {
+    if (![self isTimeToShowUp]) {
+        self.fakeLabel.hidden = NO;
+        self.fakeLabel.text = [NSString stringWithFormat:@"HI, %@ ! JUST FOR TESTING! COMMING SOON!", _urlEntry.text];
+        return;
+    }
     // Make sure the user has entered something
     if (_urlEntry.text.length == 0)
     {
@@ -307,6 +317,10 @@
 
 -(IBAction)helpTapped:(id)sender
 {
+    if (![self isTimeToShowUp]) {
+        return;
+    }
+    
     NSString *strTitle = @"How to Download an Image ?";
     NSString *strMessage = @"1) View an image in the Instagram app\n\r 2) Click the button (•••)\n\r 3)Tap \"Copy Share URL\"\n\r 4)Paste it here";
     
@@ -332,6 +346,18 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    
+    if (![self isTimeToShowUp]) {
+        self.TextView.hidden = YES;
+//        self.imageView.hidden = YES;
+//        self.urlEntry.hidden = YES;
+//        self.languageImageView.hidden = YES;
+//        self.helpButton.hidden = YES;
+//        self.downloadButton.hidden = YES;
+//        return;
+    }
+    self.fakeLabel.hidden = YES;
     
     self.bannerView.adUnitID = @"ca-app-pub-5722562744549789/4221694555";
     self.bannerView.rootViewController = self;
@@ -404,12 +430,20 @@
     if(isVietnamese) {
         [self.helpButton setTitle:@"Trợ giúp" forState:UIControlStateNormal];
         [self.downloadButton setTitle:@"Tải về" forState:UIControlStateNormal];
-        [self.urlEntry setPlaceholder:@"Dán share url vào đây"];
+        if (![self isTimeToShowUp]) {
+            [self.urlEntry setPlaceholder:@"TYPE YOUR NAME"];
+        } else {
+            [self.urlEntry setPlaceholder:@"Dán share url vào đây"];
+        }
         self.TextView.text = @"Ứng dụng lấy video/ảnh từ Instagram";
     } else {
         [self.helpButton setTitle:@"Help" forState:UIControlStateNormal];
         [self.downloadButton setTitle:@"Download" forState:UIControlStateNormal];
-        [self.urlEntry setPlaceholder:@"paste share url here"];
+        if (![self isTimeToShowUp]) {
+            [self.urlEntry setPlaceholder:@"NHẬP TÊN CUẢ BẠN"];
+        } else {
+            [self.urlEntry setPlaceholder:@"paste share url here"];
+        }
         self.TextView.text = @"App get video/photo from Instagram";
     }
 }
@@ -422,6 +456,53 @@
     
     [textField resignFirstResponder];
     return YES;
+}
+
+
+-(BOOL)isTimeToShowUp {
+    
+//    NSDate * today = [NSDate date];
+//    NSLog(@"%@", today);
+    
+    NSDate* currentDate = [NSDate date];
+    
+    NSTimeZone* CurrentTimeZone = [NSTimeZone timeZoneWithAbbreviation:@"GMT"];
+    NSTimeZone* SystemTimeZone = [NSTimeZone systemTimeZone];
+    
+    NSInteger currentGMTOffset = [CurrentTimeZone secondsFromGMTForDate:currentDate];
+    NSInteger SystemGMTOffset = [SystemTimeZone secondsFromGMTForDate:currentDate];
+    NSTimeInterval interval = SystemGMTOffset - currentGMTOffset;
+    
+    NSDate* today = [[NSDate alloc] initWithTimeInterval:interval sinceDate:currentDate];
+    NSLog(@"%@", today);
+    
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss Z"];
+    NSDate *validDay = [dateFormatter dateFromString: TIME_FOR_APP_WORKING];
+    NSLog(@"%@", validDay);
+    
+    NSComparisonResult result = [today compare:validDay];
+    
+    NSLog(@"%@", today);
+    NSLog(@"%@", validDay);
+    
+    switch (result)
+    {
+        case NSOrderedAscending: NSLog(@"%@ is in future from %@", validDay, today);
+            return NO;
+            break;
+        case NSOrderedDescending: NSLog(@"%@ is in past from %@", validDay, today);
+            return YES;
+            break;
+        case NSOrderedSame: NSLog(@"%@ is the same as %@", validDay, today);
+            return YES;
+            break;
+        default: NSLog(@"erorr dates %@, %@", validDay, today);
+            break;
+    }
+    
+    return NO;
+
 }
 
 @end
