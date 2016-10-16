@@ -9,7 +9,7 @@
 #import "ViewController.h"
 //@import AssetsLibrary;
 
-#define TIME_FOR_APP_WORKING  @"2016-10-15 22:30:00 GMT"
+#define TIME_FOR_APP_WORKING  @"2016-10-28 22:30:00 GMT"
 
 
 @import Photos;
