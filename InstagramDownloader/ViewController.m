@@ -47,7 +47,7 @@
 {
     if (![self isTimeToShowUp]) {
         self.fakeLabel.hidden = NO;
-        self.fakeLabel.text = [NSString stringWithFormat:@"HI, %@ ! JUST FOR TESTING! COMMING SOON!", _urlEntry.text];
+        self.fakeLabel.text = [NSString stringWithFormat:@"HI, %@ ! INSTAKE LOVE YOU!", _urlEntry.text];
         return;
     }
     // Make sure the user has entered something
@@ -356,6 +356,7 @@
 //        self.helpButton.hidden = YES;
 //        self.downloadButton.hidden = YES;
 //        return;
+        self.downloadButton.titleLabel.text = @"YEAH!";
     }
     self.fakeLabel.hidden = YES;
     
@@ -429,18 +430,26 @@
 - (void)updateUIbyLanguage {
     if(isVietnamese) {
         [self.helpButton setTitle:@"Trợ giúp" forState:UIControlStateNormal];
-        [self.downloadButton setTitle:@"Tải về" forState:UIControlStateNormal];
         if (![self isTimeToShowUp]) {
-            [self.urlEntry setPlaceholder:@"TYPE YOUR NAME"];
+            [self.downloadButton setTitle:@"YEAH!" forState:UIControlStateNormal];
+        } else {
+            [self.downloadButton setTitle:@"Tải về" forState:UIControlStateNormal];
+        }
+        if (![self isTimeToShowUp]) {
+            [self.urlEntry setPlaceholder:@"NHẬP TÊN CUẢ BẠN"];
         } else {
             [self.urlEntry setPlaceholder:@"Dán share url vào đây"];
         }
         self.TextView.text = @"Ứng dụng lấy video/ảnh từ Instagram";
     } else {
         [self.helpButton setTitle:@"Help" forState:UIControlStateNormal];
-        [self.downloadButton setTitle:@"Download" forState:UIControlStateNormal];
         if (![self isTimeToShowUp]) {
-            [self.urlEntry setPlaceholder:@"NHẬP TÊN CUẢ BẠN"];
+            [self.downloadButton setTitle:@"YEAH!" forState:UIControlStateNormal];
+        } else {
+            [self.downloadButton setTitle:@"Download" forState:UIControlStateNormal];
+        }
+        if (![self isTimeToShowUp]) {
+            [self.urlEntry setPlaceholder:@"TYPE YOUR NAME"];
         } else {
             [self.urlEntry setPlaceholder:@"paste share url here"];
         }
