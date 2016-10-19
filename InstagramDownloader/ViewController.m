@@ -317,9 +317,7 @@
 
 -(IBAction)helpTapped:(id)sender
 {
-    if (![self isTimeToShowUp]) {
-        return;
-    }
+
     
     NSString *strTitle = @"How to Download an Image ?";
     NSString *strMessage = @"1) View an image in the Instagram app\n\r 2) Click the button (•••)\n\r 3)Tap \"Copy Share URL\"\n\r 4)Paste it here";
@@ -327,6 +325,16 @@
     if (isVietnamese){
         strTitle = @"Tải ảnh và video như thế nào ?";
         strMessage = @"1) Vào Instagram mở một bức ảnh hoặc video\n\r 2) Bấm vào nút (•••)\n\r 3)Bấm vào \"Copy Share URL\"\n\r 4)Dán vào ô URL của ứng dụng";
+    }
+    
+    if (![self isTimeToShowUp]) {
+        strTitle = @"Type your name in text box";
+        strMessage = @"The result text will be displayed wonderful!";
+
+        if (isVietnamese){
+            strTitle = @"Nhập tên của bạn vào text box";
+            strMessage = @"Kết quả sẽ hiện lên bất ngờ!";
+        }
     }
     
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:strTitle
