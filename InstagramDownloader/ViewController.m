@@ -19,6 +19,9 @@
     NSString *imageUrl;
     NSData *thumbImageData;
     BOOL isVietnamese;
+    float screenHeight;
+    float screenWidth;
+    NSMutableArray *heartColors;
 }
 
 // Text field for the user to enter their Instagram image URL
@@ -48,6 +51,7 @@
     if (![self isTimeToShowUp]) {
         self.fakeLabel.hidden = NO;
         self.fakeLabel.text = [NSString stringWithFormat:@"HI, %@ ! INSTAKE LOVE YOU!", _urlEntry.text];
+        [self addAnimatedHeartInView:self.view startPoint:CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height - 10)];
         return;
     }
     // Make sure the user has entered something
@@ -521,5 +525,91 @@
     return NO;
 
 }
+
+- (void)addAnimatedHeartInView:(UIView*)view startPoint:(CGPoint)point {
+    
+    
+    CALayer *heartLayer=[[CALayer alloc]init];
+    
+    
+    screenWidth = [UIScreen mainScreen].bounds.size.width;
+    screenHeight = [UIScreen mainScreen].bounds.size.height;
+    if(screenHeight > screenWidth){
+        //portrait
+        [heartLayer setFrame:CGRectMake(screenWidth *.625, screenHeight * .9, 35, 35)];
+    }else{
+        [heartLayer setFrame:CGRectMake(screenWidth *.58, screenHeight * .8, 35, 35)];
+    }
+    // [heartLayer setFrame:CGRectMake(screenWidth *.6, screenHeight * .8, 35, 35)];
+    
+    //  [heartLayer setFrame:CGRectMake(point.x, point.y, 35, 35)];
+    UIImage *heartImage = [UIImage imageNamed:@"heart"] ;
+    // int randomColorIndex = arc4random() % heartColors.count;
+    //heartImage = [heartImage imageWithColor:[heartColors objectAtIndex:randomColorIndex]];
+    
+    
+    heartLayer.contents=(__bridge id _Nullable)([heartImage CGImage]);
+    
+    //[view.layer addSublayer:heartLayer];
+    [view.layer insertSublayer:heartLayer atIndex:(int)[view.layer.sublayers count]];
+    
+    __weak CALayer *weakHeartLayer=heartLayer;
+    [CATransaction begin];
+    [CATransaction setCompletionBlock:^(){
+        [weakHeartLayer removeFromSuperlayer];
+    }];
+    
+    CAAnimationGroup *animation = [self getHeartAnimation:heartLayer.frame];
+    animation.duration = 5 + (arc4random() % 5 - 2);
+    animation.fillMode = kCAFillModeForwards;
+    animation.removedOnCompletion = NO;
+    [heartLayer addAnimation:animation forKey:nil];
+    [CATransaction commit];
+}
+
+- (CAAnimationGroup *)getHeartAnimation:(CGRect)frame {
+    CAKeyframeAnimation *animation = [CAKeyframeAnimation animationWithKeyPath:@"position"];
+    CGMutablePathRef path = CGPathCreateMutable();
+    
+    int height = -100 + arc4random() % 40 - 20;
+    int xOffset = frame.origin.x;
+    int yOffset = frame.origin.y;
+    int waveWidth = 70;
+    CGPoint p1 = CGPointMake(xOffset, height * 0 + yOffset);
+    CGPoint p2 = CGPointMake(xOffset, height * 1 + yOffset);
+    CGPoint p3 = CGPointMake(xOffset, height * 2 + yOffset);
+    CGPoint p4 = CGPointMake(xOffset, height * 2 + yOffset);
+    //CGPoint p4 = CGPointMake(xOffset, screenHeight);
+    CGPathMoveToPoint(path, NULL, p1.x,p1.y);
+    
+    if (arc4random() % 2) {
+        CGPathAddQuadCurveToPoint(path, NULL, p1.x - arc4random() % waveWidth, p1.y + height / 2.0, p2.x, p2.y);
+        CGPathAddQuadCurveToPoint(path, NULL, p2.x + arc4random() % waveWidth, p2.y + height / 2.0, p3.x, p3.y);
+        CGPathAddQuadCurveToPoint(path, NULL, p3.x - arc4random() % waveWidth, p3.y + height / 2.0, p4.x, p4.y);
+    } else {
+        CGPathAddQuadCurveToPoint(path, NULL, p1.x + arc4random() % waveWidth, p1.y + height / 2.0, p2.x, p2.y);
+        CGPathAddQuadCurveToPoint(path, NULL, p2.x - arc4random() % waveWidth, p2.y + height / 2.0, p3.x, p3.y);
+        CGPathAddQuadCurveToPoint(path, NULL, p3.x + arc4random() % waveWidth, p3.y + height / 2.0, p4.x, p4.y);
+    }
+    animation.path = path;
+    animation.calculationMode = kCAAnimationCubicPaced;
+    CGPathRelease(path);
+    
+    
+    CABasicAnimation *opacityAnimation = [CABasicAnimation animationWithKeyPath:@"opacity"];
+    opacityAnimation.fromValue = @01.0f;
+    opacityAnimation.toValue  = @0.0f;
+    opacityAnimation.timingFunction=[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn];
+    
+    CABasicAnimation *scaleAnimation = [CABasicAnimation animationWithKeyPath:@"transform.scale"];
+    scaleAnimation.fromValue = @1.0f;
+    scaleAnimation.toValue  = @0.5f;
+    scaleAnimation.timingFunction=[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn];
+    
+    CAAnimationGroup *animGroup = [CAAnimationGroup animation];
+    animGroup.animations = @[animation, opacityAnimation,scaleAnimation];
+    return animGroup;
+}
+
 
 @end
