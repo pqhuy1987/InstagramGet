@@ -571,7 +571,7 @@
     CAKeyframeAnimation *animation = [CAKeyframeAnimation animationWithKeyPath:@"position"];
     CGMutablePathRef path = CGPathCreateMutable();
     
-    int height = -100 + arc4random() % 40 - 20;
+    int height = -200 + arc4random() % 40 - 20;
     int xOffset = frame.origin.x;
     int yOffset = frame.origin.y;
     int waveWidth = 70;
