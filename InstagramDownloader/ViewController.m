@@ -22,6 +22,8 @@
     float screenHeight;
     float screenWidth;
     NSMutableArray *heartColors;
+    int a,b;
+    NSTimer *timer;
 }
 
 // Text field for the user to enter their Instagram image URL
@@ -52,6 +54,13 @@
         self.fakeLabel.hidden = NO;
         self.fakeLabel.text = [NSString stringWithFormat:@"HI, %@ ! INSTAKE LOVE YOU!", _urlEntry.text];
         [self addAnimatedHeartInView:self.view startPoint:CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height - 10)];
+        a = 1;
+        b = 2;
+        if (timer) {
+            [timer invalidate];
+        }
+        timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(onTick) userInfo:nil repeats:YES];
+
         return;
     }
     // Make sure the user has entered something
@@ -609,6 +618,12 @@
     CAAnimationGroup *animGroup = [CAAnimationGroup animation];
     animGroup.animations = @[animation, opacityAnimation,scaleAnimation];
     return animGroup;
+}
+
+-(void)onTick {
+    a++;
+    b++;
+    self.fakeLabel.text = [NSString stringWithFormat:@"You can see : %d+%d=%d",a,b,a+b ];
 }
 
 
