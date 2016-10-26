@@ -43,26 +43,13 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *TextView;
 
-@property (weak, nonatomic) IBOutlet UILabel *fakeLabel;
 @end
 
 @implementation ViewController
 
 -(IBAction)downloadTapped:(id)sender
 {
-    if (![self isTimeToShowUp]) {
-        self.fakeLabel.hidden = NO;
-        self.fakeLabel.text = [NSString stringWithFormat:@"HI, %@ ! INSTAKE LOVE YOU!", _urlEntry.text];
-        [self addAnimatedHeartInView:self.view startPoint:CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height - 10)];
-        a = 1;
-        b = 2;
-        if (timer) {
-            [timer invalidate];
-        }
-        timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(onTick) userInfo:nil repeats:YES];
 
-        return;
-    }
     // Make sure the user has entered something
     if (_urlEntry.text.length == 0)
     {
@@ -340,15 +327,6 @@
         strMessage = @"1) Vào Instagram mở một bức ảnh hoặc video\n\r 2) Bấm vào nút (•••)\n\r 3)Bấm vào \"Copy Share URL\"\n\r 4)Dán vào ô URL của ứng dụng";
     }
     
-    if (![self isTimeToShowUp]) {
-        strTitle = @"Type your name in text box";
-        strMessage = @"The result text will be displayed wonderful!";
-
-        if (isVietnamese){
-            strTitle = @"Nhập tên của bạn vào text box";
-            strMessage = @"Kết quả sẽ hiện lên bất ngờ!";
-        }
-    }
     
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:strTitle
                                                                    message:strMessage
@@ -367,19 +345,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    
-    if (![self isTimeToShowUp]) {
-        self.TextView.hidden = YES;
-//        self.imageView.hidden = YES;
-//        self.urlEntry.hidden = YES;
-//        self.languageImageView.hidden = YES;
-//        self.helpButton.hidden = YES;
-//        self.downloadButton.hidden = YES;
-//        return;
-        self.downloadButton.titleLabel.text = @"YEAH!";
-    }
-    self.fakeLabel.hidden = YES;
     
     self.bannerView.adUnitID = @"ca-app-pub-5722562744549789/4221694555";
     self.bannerView.rootViewController = self;
@@ -451,29 +416,20 @@
 - (void)updateUIbyLanguage {
     if(isVietnamese) {
         [self.helpButton setTitle:@"Trợ giúp" forState:UIControlStateNormal];
-        if (![self isTimeToShowUp]) {
-            [self.downloadButton setTitle:@"YEAH!" forState:UIControlStateNormal];
-        } else {
-            [self.downloadButton setTitle:@"Tải về" forState:UIControlStateNormal];
-        }
-        if (![self isTimeToShowUp]) {
-            [self.urlEntry setPlaceholder:@"NHẬP TÊN CUẢ BẠN"];
-        } else {
-            [self.urlEntry setPlaceholder:@"Dán share url vào đây"];
-        }
+
+        [self.downloadButton setTitle:@"Tải về" forState:UIControlStateNormal];
+
+        [self.urlEntry setPlaceholder:@"Dán share url vào đây"];
+
         self.TextView.text = @"Ứng dụng lấy video/ảnh từ Instagram";
     } else {
         [self.helpButton setTitle:@"Help" forState:UIControlStateNormal];
-        if (![self isTimeToShowUp]) {
-            [self.downloadButton setTitle:@"YEAH!" forState:UIControlStateNormal];
-        } else {
-            [self.downloadButton setTitle:@"Download" forState:UIControlStateNormal];
-        }
-        if (![self isTimeToShowUp]) {
-            [self.urlEntry setPlaceholder:@"TYPE YOUR NAME"];
-        } else {
-            [self.urlEntry setPlaceholder:@"paste share url here"];
-        }
+
+        [self.downloadButton setTitle:@"Download" forState:UIControlStateNormal];
+
+
+        [self.urlEntry setPlaceholder:@"paste share url here"];
+        
         self.TextView.text = @"App get video/photo from Instagram";
     }
 }
@@ -620,11 +576,6 @@
     return animGroup;
 }
 
--(void)onTick {
-    a++;
-    b++;
-    self.fakeLabel.text = [NSString stringWithFormat:@"You can see : %d+%d=%d",a,b,a+b ];
-}
 
 
 @end
