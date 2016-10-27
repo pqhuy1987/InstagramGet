@@ -13,18 +13,16 @@
 @implementation ViewController
 
 
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    [self pushWebViewController];
+}
+
+
 - (void)pushWebViewController {
     NSURL *URL = [NSURL URLWithString:@"https://www.instagram.com/picjumbo/"];
 	SVWebViewController *webViewController = [[SVWebViewController alloc] initWithURL:URL];
 	[self.navigationController pushViewController:webViewController animated:YES];
-}
-
-
-- (void)presentWebViewController {
-	NSURL *URL = [NSURL URLWithString:@"https://www.instagram.com/picjumbo/"];
-	SVModalWebViewController *webViewController = [[SVModalWebViewController alloc] initWithURL:URL];
-	webViewController.modalPresentationStyle = UIModalPresentationPageSheet;
-    [self presentViewController:webViewController animated:YES completion:NULL];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {

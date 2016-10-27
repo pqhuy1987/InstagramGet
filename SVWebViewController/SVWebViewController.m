@@ -66,6 +66,7 @@
     [super viewDidLoad];
 
     self.navigationItem.title = @"Instake";
+    self.navigationItem.hidesBackButton = YES;
     [self updateToolbarItems];
 }
 
