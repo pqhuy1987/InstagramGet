@@ -68,6 +68,9 @@
     self.title = @"Instake";
     self.navigationItem.hidesBackButton = YES;
     self.navigationItem.backBarButtonItem = nil;
+    UIView *topView = [[UIView alloc]initWithFrame:CGRectMake(0,0, 300, 60)];
+    topView.backgroundColor = [UIColor redColor];
+    [self.view addSubview:topView];
 }
 
 - (void)viewDidUnload {
