@@ -11,6 +11,13 @@
 #import "SVWebViewController.h"
 
 @interface SVWebViewController () <UIWebViewDelegate>
+{
+    NSURL *imageURL;
+    BOOL loadingIMG;
+    UIProgressView *progressView;
+    NSTimer *myTimer;
+    BOOL theBool;
+}
 
 @property (nonatomic, strong) UIBarButtonItem *backBarButtonItem;
 @property (nonatomic, strong) UIBarButtonItem *forwardBarButtonItem;
@@ -65,12 +72,23 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self updateToolbarItems];
-    self.title = @"Instake";
+    self.title = @"PEXELS";
     self.navigationItem.hidesBackButton = YES;
     self.navigationItem.backBarButtonItem = nil;
-    UIView *topView = [[UIView alloc]initWithFrame:CGRectMake(0,0, 300, 60)];
-    topView.backgroundColor = [UIColor redColor];
-    [self.view addSubview:topView];
+    
+    if ( UI_USER_INTERFACE_IDIOM() != UIUserInterfaceIdiomPad )
+    {
+        UIView *topView = [[UIView alloc]initWithFrame:CGRectMake(0,0, 300, 60)];
+        topView.backgroundColor = [UIColor magentaColor];
+        [self.view addSubview:topView];
+        
+        progressView = [[UIProgressView alloc] init];
+        progressView.frame = CGRectMake(0, 64,self.view.frame.size.width,25);
+        [self.view addSubview:progressView];
+        [self.view bringSubviewToFront:progressView];
+    }
+    loadingIMG = NO;
+
 }
 
 - (void)viewDidUnload {
@@ -226,23 +244,42 @@
 
 - (void)webViewDidStartLoad:(UIWebView *)webView {
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    
+    progressView.progress = 0;
+    progressView.hidden = NO;
+    theBool = false;
+    //0.01667 is roughly 1/60, so it will update at 60 FPS
+    myTimer = [NSTimer scheduledTimerWithTimeInterval:0.01 target:self selector:@selector(timerCallback) userInfo:nil repeats:YES];
     [self updateToolbarItems];
     
     if ([self.delegate respondsToSelector:@selector(webViewDidStartLoad:)]) {
         [self.delegate webViewDidStartLoad:webView];
     }
+    
 }
 
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView {
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-    
+    theBool = true;
     [self updateToolbarItems];
     
     if ([self.delegate respondsToSelector:@selector(webViewDidFinishLoad:)]) {
         [self.delegate webViewDidFinishLoad:webView];
     }
+    
+    if (loadingIMG) {
+        UIActionSheet *popup = [[UIActionSheet alloc] initWithTitle:@"Options" delegate:(id)self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:
+                                @"Save to Camera Roll",
+                                //@"Rate this App",
+                                nil];
+        popup.tag = 1;
+        [popup showInView:self.view];
+        loadingIMG = NO;
+    }
+    
 }
+
 
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error {
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
@@ -254,11 +291,69 @@
 }
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
+
+    if (navigationType == UIWebViewNavigationTypeLinkClicked){
+        if ([request.URL.absoluteString rangeOfString:@".jpeg"].location != NSNotFound) {
+            loadingIMG = YES;
+            imageURL = request.URL;
+        }
+    }
+    
     if ([self.delegate respondsToSelector:@selector(webView:shouldStartLoadWithRequest:navigationType:)]) {
         return [self.delegate webView:webView shouldStartLoadWithRequest:request navigationType:navigationType];
     }
     
     return YES;
+}
+
+- (void)actionSheet:(UIActionSheet *)popup clickedButtonAtIndex:(NSInteger)buttonIndex {
+    
+    switch (popup.tag) {
+        case 1: {
+            switch (buttonIndex) {
+                case 0:
+                    [self saveToCameraRoll];
+                    break;
+                default:
+                    break;
+            }
+            break;
+        }
+        default:
+            break;
+    }
+}
+
+- (void)saveToCameraRoll {
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSData *data = [NSData dataWithContentsOfURL:imageURL];
+        UIImage* image = [[UIImage alloc]initWithData:data];
+        
+        if (image) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil);
+            });
+        }
+    });
+}
+
+-(void)timerCallback {
+    if (theBool) {
+        if (progressView.progress >= 1) {
+            progressView.hidden = true;
+            [myTimer invalidate];
+        }
+        else {
+            progressView.progress += 0.1;
+        }
+    }
+    else {
+        progressView.progress += 0.05;
+        if (progressView.progress >= 0.95) {
+            progressView.progress = 0.95;
+        }
+    }
 }
 
 #pragma mark - Target actions
@@ -305,6 +400,8 @@
         }
     }
 }
+
+
 
 - (void)doneButtonTapped:(id)sùender {
     [self dismissViewControllerAnimated:YES completion:NULL];
