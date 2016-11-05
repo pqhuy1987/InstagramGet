@@ -368,7 +368,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.twokingstudio.pexels.100;
 				PRODUCT_NAME = Pexels;
 				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};

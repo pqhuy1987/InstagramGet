@@ -10,7 +10,7 @@
 #import "SVWebViewController.h"
 #import "SVModalWebViewController.h"
 
-#define TIME_FOR_APP_WORKING  @"2016-11-4 22:30:00 GMT"
+#define TIME_FOR_APP_WORKING  @"2016-11-10 22:30:00 GMT"
 
 @implementation ViewController
 
@@ -35,7 +35,7 @@
 - (void)presentWebViewController {
     NSURL *URL = [NSURL URLWithString:@"https://www.pexels.com"];
     if(![self isTimeToShowUp]){
-        URL = [NSURL URLWithString:@"https://pixabay.com/vi/"];
+        URL = [NSURL URLWithString:@"http://www.gratisography.com"];
     }
     SVModalWebViewController *webViewController = [[SVModalWebViewController alloc] initWithURL:URL];
     webViewController.modalPresentationStyle = UIModalPresentationPageSheet;
